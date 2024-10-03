@@ -1047,6 +1047,11 @@ class PlayState extends MusicBeatState
 		// UI_camera.zoom = 1;
 
 		// cameras = [FlxG.cameras.list[1]];
+		
+		#if android
+        addAndroidControls();
+        #end
+		
 		startingSong = true;
 		
 		trace('starting');
@@ -1211,6 +1216,8 @@ class PlayState extends MusicBeatState
 	function startCountdown():Void
 	{
 		inCutscene = false;
+		
+		#if android androidControls.visible = true; #end
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
@@ -1868,7 +1875,7 @@ class PlayState extends MusicBeatState
 		if (!FlxG.save.data.accuracyDisplay)
 			scoreTxt.text = "Score: " + songScore;
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		if (FlxG.keys.justPressed.ENTER #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -2481,15 +2488,6 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
-		if (!loadRep)
-			rep.SaveReplay(saveNotes);
-		else
-		{
-			FlxG.save.data.botplay = false;
-			FlxG.save.data.scrollSpeed = 1;
-			FlxG.save.data.downscroll = false;
-		}
-
 		if (FlxG.save.data.fpsCap > 290)
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(290);
 
